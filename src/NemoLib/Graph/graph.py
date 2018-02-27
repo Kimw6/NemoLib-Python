@@ -1,14 +1,14 @@
 # 
 #  Implementation of graph data structure to manage network graphs.
 #  
+from NemoLib.Graph.adjacencylist import AdjacencyList
 
 # Look into serialization
 class Graph:
 
-
     #graph constructor
     def __init__(self):
-        self._adjacencyLists = []
+        self._adjacencyLists = AdjacencyList()
         self._maxNodeId = 0
     
 #      #Add a vertex to this Graph.
@@ -17,10 +17,6 @@ class Graph:
         self._adjacencyLists.push([])
         return self._adjacencyLists.__len__() - 1
         
-        
-    
-# 
-#     
 #      Add an edge between two existing vertices on this graph.
 #      @param vertexA One of the vertices between which to addSubgraph an edge.
 #      @param vertexB The other vertex.
@@ -44,18 +40,18 @@ class Graph:
     def getAdjacencyList(self, index):
         return self.adjacencyLists[index]
 
-#     get index of a node given the node's name
-#     create an entry if it does not exist     
+#    get index of a node given the node's name
+#    create an entry if it does not exist     
 #    @param String    nodeName name mapped to a vertex
 #    @param Dict      nameToIndex  defines index of name
-#    def getOrCreateIndex(self, nodeName, nameToIndex):
-#     WIP
-#         if (!nameToIndex.containsKey(nodeName)) {
-#             nameToIndex.put(nodeName, adjacencyLists.size());
-#             adjacencyLists.add(new AdjacencyList());
-#         }
-#         return nameToIndex.get(nodeName);
-#     }
+#     def getOrCreateIndex(self, nodeName, nameToIndex):
+#         if (nameToIndex.)
+#          if (!nameToIndex.containsKey(nodeName)) {
+#              nameToIndex.put(nodeName, adjacencyLists.size());
+#              adjacencyLists.add(new AdjacencyList());
+#          }
+#          return nameToIndex.get(nodeName);
+
 # 
 #     /**
 #      * Return a string representation of this Graph object.
@@ -79,33 +75,22 @@ class Graph:
 #     }
 # 
 #     // Represents edges for a Graph
-#     private class Edge {
-#         int nodeA;
-#         int nodeB;
-# 
-#         Edge() {
-#             throw new AssertionError();
-#         }
-# 
-#         Edge(int nodeA, int nodeB) {
-#             this.nodeA = nodeA;
-#             this.nodeB = nodeB;
-#         }
-# 
-#         @Override
-#         public boolean equals(Object o) {
-#             if (o.getClass() != this.getClass()) {
-#                 return false;
-#             }
-#             return (this.nodeA == ((Edge)o).nodeA &&
-#                     this.nodeB == ((Edge)o).nodeB) ||
-#                     (this.nodeA == ((Edge)o).nodeB &&
-#                             this.nodeB == ((Edge)o).nodeA);
-#         }
-# 
-#         @Override
-#         public String toString() {
-#             return "[" + nodeA + ", " + nodeB + "]";
-#         }
-#     }
-# }
+class _Edge:
+    
+    def __init__(self, *args):
+        self.nodeA = args[0]
+        self.nodeB = args[1]
+ 
+#       @Override
+        def __eq__(self, other):
+            if (type(other) is not type(self)):
+                return False
+
+            return ((self.nodeA == other.nodeA and
+                    self.nodeB == other.nodeB) or
+                    (self.nodeA == other.nodeB and
+                    self.nodeB == other.nodeA))
+
+#       @Override
+        def __str__(self):
+            return "[", str(self.nodeA) , ", ",  str(self.nodeB), "]"
