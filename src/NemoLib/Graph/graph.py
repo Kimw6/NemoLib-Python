@@ -35,25 +35,21 @@ class Graph:
             self._adjacencyLists[vertexA].push(vertexB)
             self._adjacencyLists[vertexB].push(vertexA)
             return True
-# 
-#     /**
-#      * Get the getSize of this Graph
-#      * @return the getSize of this graph
-#      */
-#     public int getSize()
-#     {
-#         return adjacencyLists.size();
-#     }
-# 
-#     // get the adjacency list for a given node
-#     public AdjacencyList getAdjacencyList(Integer index) {
-#         return adjacencyLists.get(index);
-#     }
-# 
-#     // get index of a node given the node's name
-#     // create an entry if it does not exist
-#     Integer getOrCreateIndex(String nodeName,
-#                                      Map<String, Integer> nameToIndex) {
+#     Get the getSize of this Graph
+#     @return the getSize of this graph
+    def getSize(self):
+        return self._adjacencyLists.__len__()
+    
+#     get the adjacency list for a given node
+    def getAdjacencyList(self, index):
+        return self.adjacencyLists[index]
+
+#     get index of a node given the node's name
+#     create an entry if it does not exist     
+#    @param String    nodeName name mapped to a vertex
+#    @param Dict      nameToIndex  defines index of name
+#    def getOrCreateIndex(self, nodeName, nameToIndex):
+#     WIP
 #         if (!nameToIndex.containsKey(nodeName)) {
 #             nameToIndex.put(nodeName, adjacencyLists.size());
 #             adjacencyLists.add(new AdjacencyList());
