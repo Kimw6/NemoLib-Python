@@ -8,13 +8,13 @@ class Graph:
 
     #graph constructor
     def __init__(self):
-        self._adjacencyLists = AdjacencyList()
+        self._adjacencyLists = []
         self._maxNodeId = 0
     
 #      #Add a vertex to this Graph.
 #      #return the ID number assigned to the new vertex
     def addVertex(self):
-        self._adjacencyLists.push([])
+        self._adjacencyLists.push(AdjacencyList())
         return self._adjacencyLists.__len__() - 1
         
 #      Add an edge between two existing vertices on this graph.
@@ -31,8 +31,9 @@ class Graph:
             self._adjacencyLists[vertexA].push(vertexB)
             self._adjacencyLists[vertexB].push(vertexA)
             return True
-#     Get the getSize of this Graph
-#     @return the getSize of this graph
+        
+#   Get the getSize of this Graph
+#   @return the getSize of this graph
     def getSize(self):
         return self._adjacencyLists.__len__()
     
@@ -44,13 +45,12 @@ class Graph:
 #    create an entry if it does not exist     
 #    @param String    nodeName name mapped to a vertex
 #    @param Dict      nameToIndex  defines index of name
-#     def getOrCreateIndex(self, nodeName, nameToIndex):
-#         if (nameToIndex.)
-#          if (!nameToIndex.containsKey(nodeName)) {
-#              nameToIndex.put(nodeName, adjacencyLists.size());
-#              adjacencyLists.add(new AdjacencyList());
-#          }
-#          return nameToIndex.get(nodeName);
+#    @returns Number  the index of a node with nodeName
+    def getOrCreateIndex(self, nodeName, nameToIndex):
+        if (nodeName not in nameToIndex):
+            nameToIndex.put(nodeName, self.adjacencyLists.size())
+            self.adjacencyLists.add(AdjacencyList())
+        return nameToIndex.get(nodeName)
 
 # 
 #     /**
