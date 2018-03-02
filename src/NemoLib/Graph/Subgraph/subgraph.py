@@ -1,6 +1,6 @@
 
 
-class Subgraph(object):
+class Subgraph:
     '''
     classdocs
     '''
