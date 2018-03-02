@@ -73,8 +73,9 @@ class Graph:
 #         }
 #         return sb.toString();
 #     }
-# 
-#     // Represents edges for a Graph
+
+
+# Represents edges for a Graph
 class _Edge:
     
     def __init__(self, *args):
@@ -90,6 +91,10 @@ class _Edge:
                     self.nodeB == other.nodeB) or
                     (self.nodeA == other.nodeB and
                     self.nodeB == other.nodeA))
+            
+        #       @Override
+        def __neq__(self, other):
+            return not self == other
 
 #       @Override
         def __str__(self):
