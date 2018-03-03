@@ -16,5 +16,5 @@ class SubgraphEnumerationResult:
 #   of labels in this subgraph.
 #   @return The map of relative frequencies
 
-    def getRelativeFrequencies():
+    def getRelativeFrequencies(self):
 
