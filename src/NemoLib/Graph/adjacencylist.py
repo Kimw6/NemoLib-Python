@@ -7,13 +7,24 @@ class AdjacencyList:
         if (type(adjList) is set):
             self._nodes = set.copy(adjList)
         else:
-            self._nodes = {}
+            self._nodes = set()
             
     def add(self, node):
         self._nodes.add(node)
     
     def __iter__(self):
-        return self.__iter__(self._nodes)
+        self._iter = iter(self._nodes)
+        self.n = 0
+        self.max = len(self._nodes)
+        return self
+
+    def __next__(self):
+        if self.n <= self.max:
+            result = next(self._iter)
+
+            return result
+        else:
+            raise StopIteration
         
     def contains(self, node):
             return self._nodes.__contains__(node)
@@ -32,3 +43,9 @@ class AdjacencyList:
 
     def copy(self):
         return AdjacencyList(self._nodes)
+
+
+s = AdjacencyList({4, 1, 5, 11, 1, 2, 3})
+
+for x in s:
+    print (x)
