@@ -1,10 +1,11 @@
 
 from NemoLib.Subgraph.subgraphenumerator import SubgraphEnumerator
 
+#  Analyzes a target graph to determine relative frequency of subgraph patterns.
 class TargetGraphAnalyzer:
 
-#    SubgraphEnumerator subgraphEnumerator
-#    SubgraphEnumerationResult subgraphEnumerationResult
+#    subgraphEnumerator = SubgraphEnumerator()
+#    subgraphEnumerationResult = SubgraphEnumerationResult()
     
 
 #   Default contructor for TargetGraphAnalyzer objects.
@@ -22,10 +23,9 @@ class TargetGraphAnalyzer:
 #   @return a mapping of subgraph labels to their respective relative
 #   frequencies in the target graph.
     def analyze(self, graph, subgraphSize):
-        subgraphEnumerator.enumerate(graph, subgraphSize, subgraphEnumerationResult)
-
-        subgraphEnumerationResult.label()
-        return subgraphEnumerationResult.getRelativeFrequencies()
+        self.subgraphEnumerator.enumerate(graph, subgraphSize, self.subgraphEnumerationResult)
+        self.subgraphEnumerationResult.label()
+        return self.subgraphEnumerationResult.getRelativeFrequencies()
 
 
     
