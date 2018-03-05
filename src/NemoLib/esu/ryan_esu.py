@@ -1,11 +1,12 @@
 from .. graph.undirected_graph import UndirectedGraph
 from .. graph.undirected_graph import getSimpleTestGraph
 from .. graph.graph_generator import generateGraph
+from .. graph.subgraph import Subgraph
 
 def nodesToGraph(graph: UndirectedGraph, nodeList: list) -> UndirectedGraph:
     '''Take a list of Vertex IDs for a given graph and return them as a Graph object.'''
     mapping = { }
-    subgraph = UndirectedGraph()
+    subgraph = Subgraph(len(nodeList))
 
     for n in nodeList:
         mapping[n] = subgraph.addVertex()
