@@ -16,7 +16,7 @@ class UndirectedGraph:
         self._numNodes += 1
         return self._numNodes - 1
 
-    def addVertexByName(self, nodeName):
+    def addVertexByName(self, nodeName: str):
         if (nodeName in self._nodesByName):
             return -1
         else:
@@ -24,7 +24,7 @@ class UndirectedGraph:
             self._nodesByName[nodeName] = index
             return index
 
-    def addEdge(self, vertexA, vertexB):
+    def addEdge(self, vertexA: int, vertexB: int):
         '''Add an edge between two vertices. Both vertices must exist. Return true if the edge was added; false otherwise.'''
         if vertexA > self._numNodes - 1 or vertexB > self._numNodes - 1:
             return False
@@ -37,11 +37,11 @@ class UndirectedGraph:
         '''Return the number of nodes in the graph.'''
         return self._numNodes
 
-    def getAdjacencyList(self, index):
+    def getAdjacencyList(self, index: int):
         '''Return the adjacency list for a particular node.'''
         return self._adjacencyLists[index]
 
-    def getVertexByName(self, nodeName):
+    def getVertexByName(self, nodeName: str):
         '''Get the index of a node given its name. Create the node if it doesn't exist.'''
         if (nodeName not in self._nodesByName):
             return self.addVertexByName(nodeName)
@@ -68,7 +68,7 @@ class _UndirectedEdge:
     _nodeA = -1
     _nodeB = -1
 
-    def __init__(self, nodeA, nodeB):
+    def __init__(self, nodeA: int, nodeB: int):
         if nodeA < nodeB:
             self._nodeA = nodeA
             self._nodeB = nodeB
@@ -102,10 +102,10 @@ if __name__ == "__main__":
 
     graph = UndirectedGraph()
 
-    for i in range(1, 25):
+    for i in range(0, 25):
         graph.addVertex()
 
-    for i in range(1, 25):
-        graph.addEdge(random.randint(1, 25), random.randint(1, 25))
+    for i in range(0, 25):
+        graph.addEdge(random.randint(0, 24), random.randint(0, 24))
 
     print(graph.__str__())
