@@ -95,6 +95,30 @@ class _UndirectedEdge:
     def __hash__(self):
         return hash((self._nodeA, self._nodeB))
 
+def getSimpleTestGraph():
+    graph = UndirectedGraph()
+
+    for _ in range(0, 12):
+        graph.addVertex()
+
+    graph.addEdge(0, 1)
+    graph.addEdge(0, 2)
+    graph.addEdge(0, 3)
+    graph.addEdge(1, 2)
+    graph.addEdge(1, 4)
+    graph.addEdge(1, 8)
+    graph.addEdge(2, 3)
+    graph.addEdge(3, 9)
+    graph.addEdge(3, 10)
+    graph.addEdge(4, 5)
+    graph.addEdge(6, 9)
+    graph.addEdge(6, 11)
+    graph.addEdge(7, 8)
+    graph.addEdge(7, 11)
+    graph.addEdge(9, 11)
+    graph.addEdge(10, 11)
+
+    return graph
 
 if __name__ == "__main__":
     '''Provide testing here.'''
