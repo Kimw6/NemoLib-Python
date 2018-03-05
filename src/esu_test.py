@@ -1,5 +1,6 @@
-from NemoLib.esu import ryan_esu
-from NemoLib.graph import undirected_graph
+from nemolib.esu import ryan_esu
+from nemolib.graph import undirected_graph
+from nemolib.labels import labelg
 
 import sys
 
@@ -8,11 +9,13 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         graph_size = int(sys.argv[1])
     else:
-        graph_size = 3
+        graph_size = 5
 
     testGraph = undirected_graph.getSimpleTestGraph()
 
     subgraphs = ryan_esu.getAllSubgraphs(testGraph, graph_size)
 
-    for graph in subgraphs:
-        print(graph)
+    result = labelg.getG6LabelCount(subgraphs)
+
+    for label in result:
+        print(label, ':', result[label])
