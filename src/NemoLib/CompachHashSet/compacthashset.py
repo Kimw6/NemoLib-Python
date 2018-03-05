@@ -61,22 +61,12 @@ class CompactHashSet(Serializable):#check on this, not 100% sure
         #  check bucket if element already exists
         i = 0
         while i < table[bucket].length:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
             if self.table[bucket][i] == element:
                 return
             i += 1
-        #  create a bucket if it does not exist
-        #  addSubgraph element to bucket
-        #  check bucket if element already exists
-        #  try to addSubgraph element if there is space
         i = 0
         while i < table[bucket].length:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
-            #  try to addSubgraph element if there is space
+
             if self.table[bucket][i] == NULL_ELEMENT:
                 self.table[bucket][i] = element
                 self.size += 1
@@ -94,17 +84,9 @@ class CompactHashSet(Serializable):#check on this, not 100% sure
         if self.table[bucket] == None:
             return False
         else:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
-            #  try to addSubgraph element if there is space
-            #  otherwise grow the bucket and addSubgraph to first new position
+
             while index < table[bucket].length:
-                #  create a bucket if it does not exist
-                #  addSubgraph element to bucket
-                #  check bucket if element already exists
-                #  try to addSubgraph element if there is space
-                #  otherwise grow the bucket and addSubgraph to first new position
+
                 if self.table[bucket][index] == element:
                     return True
                 index += 1
@@ -117,17 +99,9 @@ class CompactHashSet(Serializable):#check on this, not 100% sure
         if self.table[bucket] == None:
             return False
         else:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
-            #  try to addSubgraph element if there is space
-            #  otherwise grow the bucket and addSubgraph to first new position
+
             while index < table[bucket].length:
-                #  create a bucket if it does not exist
-                #  addSubgraph element to bucket
-                #  check bucket if element already exists
-                #  try to addSubgraph element if there is space
-                #  otherwise grow the bucket and addSubgraph to first new position
+
                 if self.table[bucket][index] == element:
                     self.table[bucket][index] = NULL_ELEMENT
                     self.size -= 1
@@ -138,38 +112,14 @@ class CompactHashSet(Serializable):#check on this, not 100% sure
     def grow(self, bucketIndex):
         newBucket = [None]*table[bucketIndex].length * 2
         index = 0
-        #  create a bucket if it does not exist
-        #  addSubgraph element to bucket
-        #  check bucket if element already exists
-        #  try to addSubgraph element if there is space
-        #  otherwise grow the bucket and addSubgraph to first new position
-        #  increase the getSize of the bucket at the given index
-        #  double the bucket getSize
+
         while index < table[bucketIndex].length:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
-            #  try to addSubgraph element if there is space
-            #  otherwise grow the bucket and addSubgraph to first new position
-            #  increase the getSize of the bucket at the given index
-            #  double the bucket getSize
+
             newBucket[index] = table[bucketIndex][index]
             index += 1
-        #  create a bucket if it does not exist
-        #  addSubgraph element to bucket
-        #  check bucket if element already exists
-        #  try to addSubgraph element if there is space
-        #  otherwise grow the bucket and addSubgraph to first new position
-        #  increase the getSize of the bucket at the given index
-        #  double the bucket getSize
+
         while index < newBucket.length:
-            #  create a bucket if it does not exist
-            #  addSubgraph element to bucket
-            #  check bucket if element already exists
-            #  try to addSubgraph element if there is space
-            #  otherwise grow the bucket and addSubgraph to first new position
-            #  increase the getSize of the bucket at the given index
-            #  double the bucket getSize
+
             newBucket[index] = NULL_ELEMENT
             index += 1
         self.table[bucketIndex] = newBucket
@@ -209,21 +159,9 @@ class CompactHashSet(Serializable):#check on this, not 100% sure
             self.col += 1
             while self.row < set.table.length:
                 if self.set.table[self.row] != None and self.col < set.table[row].length:
-                    #  create a bucket if it does not exist
-                    #  addSubgraph element to bucket
-                    #  check bucket if element already exists
-                    #  try to addSubgraph element if there is space
-                    #  otherwise grow the bucket and addSubgraph to first new position
-                    #  increase the getSize of the bucket at the given index
-                    #  double the bucket getSize
+
                     while self.col < set.table[row].length:
-                        #  create a bucket if it does not exist
-                        #  addSubgraph element to bucket
-                        #  check bucket if element already exists
-                        #  try to addSubgraph element if there is space
-                        #  otherwise grow the bucket and addSubgraph to first new position
-                        #  increase the getSize of the bucket at the given index
-                        #  double the bucket getSize
+     
                         if self.set.table[self.row][self.col] != NULL_ELEMENT:
                             return
                         self.col += 1
