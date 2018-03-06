@@ -1,7 +1,55 @@
 from . undirected_graph import UndirectedGraph
 from . undirected_graph import getSimpleTestGraph
-import random
 
+import random
+import multiprocessing
+import os
+
+def generateGraphSet(sourceGraph: UndirectedGraph, numGraphs: int, useMultiprocessing: bool = False) -> list:
+    '''Create a set of random graphs based on the source graph.'''
+
+    if useMultiprocessing:
+        graphCount = []
+        numCores = multiprocessing.cpu_count()
+
+        if numGraphs % numCores == 0:
+            for _ in range(0, numCores):
+                graphCount.append(numGraphs // numCores)
+        else:
+            remainder = numGraphs % (numCores - 1)
+            for _ in range(0, numCores - 1):
+                graphCount.append(numGraphs // (numCores - 1))
+
+            graphCount.append(remainder)
+
+        graphLists = []
+        for _ in graphCount:
+            graphLists.append(list())
+
+        processes = []
+
+        for i, count in enumerate(graphCount):
+            p = multiprocessing.Process(target=getGeneratedGraph, args=(sourceGraph, count, graphLists[i]))
+            p.start()
+            processes.append(p)
+
+        for p in processes:
+            p.join()
+
+        result = []
+        for graphList in graphLists:
+            result += graphList
+    else:
+        result = []
+        for _ in range(0, numGraphs):
+            result.append(generateGraph)
+
+    return result
+
+def getGeneratedGraph(sourceGraph: UndirectedGraph, count: int, graphs: list):
+    '''Get a single generated graph and put it in a multiprocessing Queue.'''
+    for _ in range(0, count):
+        graphs.append(generateGraph(sourceGraph))
 
 def generateGraph(sourceGraph: UndirectedGraph) -> UndirectedGraph:
     '''Generates a random graph of the same size and compexity of an input graph.'''
@@ -53,14 +101,21 @@ def getDegreeSequenceVector(graph: UndirectedGraph) -> list:
 
     return degreeSequenceVector
 
-
-if __name__ == "__main__":
-    '''Provide testing here.'''
-    import random
+def _test():
+    import time
 
     graph = getSimpleTestGraph()
 
-    randomGraph = generateGraph(graph)
+    start = time.time()
+    generateGraphSet(graph, 100000, True)
+    end = time.time()
+    print(end - start)
 
-    print(graph)
-    print(randomGraph)
+    start = time.time()
+    generateGraphSet(graph, 100000)
+    end = time.time()
+    print(end - start)
+
+if __name__ == "__main__":
+    '''Provide testing here.'''
+    _test()
