@@ -2,6 +2,8 @@ from .. graph.undirected_graph import UndirectedGraph
 from .. graph.undirected_graph import getSimpleTestGraph
 from .. graph.graph_generator import generateGraph
 
+import random
+
 def nodesToGraph(graph: UndirectedGraph, nodeList: list) -> UndirectedGraph:
     '''Take a list of Vertex IDs for a given graph and return them as a Graph object.'''
     mapping = { }
@@ -18,7 +20,7 @@ def nodesToGraph(graph: UndirectedGraph, nodeList: list) -> UndirectedGraph:
 
     return subgraph
 
-def getAllSubgraphs(graph: UndirectedGraph, graphSize: int) -> list:
+def getAllSubgraphs(graph: UndirectedGraph, graphSize: int, probabilityList: list) -> list:
     '''Enumerate through ESU algorithm and retrieve all subgraphs of a given size for this graph.'''
     subgraphList = list()
     exclusionList = []
@@ -29,7 +31,7 @@ def getAllSubgraphs(graph: UndirectedGraph, graphSize: int) -> list:
             if n not in exclusionList and n not in nodeList and n not in neighborList:
                 neighborList.append(n)
 
-        getSubgraphs(graph, graphSize, nodeList, neighborList, exclusionList, subgraphList)
+        getSubgraphs(graph, graphSize, nodeList, neighborList, exclusionList, subgraphList, probabilityList)
         exclusionList.append(i)
 
     subgraphs = list()
@@ -38,11 +40,14 @@ def getAllSubgraphs(graph: UndirectedGraph, graphSize: int) -> list:
 
     return subgraphs
 
-
-
-
-def getSubgraphs(graph: UndirectedGraph, remainingLayers: int, nodeList: list, neighborList: list, exclusionList: list, subgraphList: list):
+def getSubgraphs(graph: UndirectedGraph, remainingLayers: int, nodeList: list,
+                 neighborList: list, exclusionList: list, subgraphList: list,
+                 probabilityList: list):
     '''Recursive call to find all subgraphs for a given graph and size.'''
+    chance = random.uniform(0, 1)
+    if chance > probabilityList[0]:
+        return
+
     if remainingLayers == 1:
         subgraphList.append(nodeList)
         return
@@ -63,7 +68,7 @@ def getSubgraphs(graph: UndirectedGraph, remainingLayers: int, nodeList: list, n
                 newNeighborList.append(n)
 
         newExclusionList.append(node)
-        getSubgraphs(graph, remainingLayers - 1, newNodeList, newNeighborList, newExclusionList, subgraphList)
+        getSubgraphs(graph, remainingLayers - 1, newNodeList, newNeighborList, newExclusionList, subgraphList, probabilityList[1:])
 
     return
 
@@ -74,7 +79,7 @@ def getSubgraphs(graph: UndirectedGraph, remainingLayers: int, nodeList: list, n
 def _test():
     graph = getSimpleTestGraph()
 
-    subgraphs = getAllSubgraphs(graph, 3)
+    subgraphs = getAllSubgraphs(graph, 3, .5)
 
     for g in subgraphs:
         print(g)
