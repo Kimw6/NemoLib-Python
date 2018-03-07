@@ -1,4 +1,5 @@
 import random
+import scipy.stats
 import math
 
 def generateTestData(size : int):
@@ -63,25 +64,39 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
     
     std = {}
     diffFromMeanSq = {}
-    n = {}
+    n = 1
     for values in originalData:
         diffFromMeanSq[values] = math.pow(originalData[values] - means[values],2)
-        n[values] = 1
     for samples in sampleData:
+        n +=1
         for sampleValues in samples:
             if sampleValues in originalData:
-                n[sampleValues] += 1
                 diffFromMeanSq[sampleValues] += math.pow(samples[sampleValues] - means[values],2)
     for values in diffFromMeanSq:
-        std[values] = math.sqrt(diffFromMeanSq[values]/(n[values]-1))         
-            
-    return std
+        if (n <= 1):
+            print("invalid sample size")
+            return {}
+        std[values] = math.sqrt(diffFromMeanSq[values]/(n-1))         
     
+    return std
+
+def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
+    z = {}
+    for values in originalData:
+        z[values] = (originalData[values] - means[values])/standardDeviations[values]
+    
+    return z
+
+def pValue(zValues: dict) -> dict:
+    p = {}
+    for values in zValues:
+        p[values] =  scipy.stats.norm.sf(abs(zValues[values]))*2
+    return p     
 
 def _test():
     originalData = generateTestData(10)
     comparisonData = []
-    for x in range(100000):
+    for x in range(100):
         comparisonData.append(generateTestData(10))
 
 
@@ -92,6 +107,10 @@ def _test():
     #print(relativeFrequency(originalData))
     #print(randomMeanFrequency(originalData, comparisonData))
     print(std)
+    z =zScore(originalData,means,std)
+    print(z)
+    p = pValue(z)
+    print(p)
     
 if __name__ == "__main__":
     _test()
