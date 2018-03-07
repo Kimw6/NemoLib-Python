@@ -1,5 +1,5 @@
 import random
-import statistics as s
+import math
 
 def generateTestData(size : int):
     dataset = {}
@@ -59,16 +59,39 @@ def mean(originalData: dict, sampleData: list) -> dict:
     
     return results;
 
+def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dict:
+    
+    std = {}
+    diffFromMeanSq = {}
+    n = {}
+    for values in originalData:
+        diffFromMeanSq[values] = math.pow(originalData[values] - means[values],2)
+        n[values] = 1
+    for samples in sampleData:
+        for sampleValues in samples:
+            if sampleValues in originalData:
+                n[sampleValues] += 1
+                diffFromMeanSq[sampleValues] += math.pow(samples[sampleValues] - means[values],2)
+    for values in diffFromMeanSq:
+        std[values] = math.sqrt(diffFromMeanSq[values]/(n[values]-1))         
+            
+    return std
+    
+
 def _test():
     originalData = generateTestData(10)
     comparisonData = []
-    for x in range(99):
+    for x in range(100000):
         comparisonData.append(generateTestData(10))
+
 
     
     means = mean(originalData, comparisonData)
-    print(relativeFrequency(originalData))
-    print(randomMeanFrequency(originalData, comparisonData))
+    print(means)
+    std = standardDeviation(originalData, comparisonData, means)
+    #print(relativeFrequency(originalData))
+    #print(randomMeanFrequency(originalData, comparisonData))
+    print(std)
     
 if __name__ == "__main__":
     _test()
