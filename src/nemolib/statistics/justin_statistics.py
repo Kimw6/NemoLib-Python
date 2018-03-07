@@ -1,16 +1,14 @@
 import random
-import scipy.stats
 import math
 
-def generateTestData(size : int):
+def generateTestData(size: int):
     dataset = {}
     for x in range(size):
         value = random.randint(1,size)
         if not value in dataset:
             dataset[value] = 1
         else:
-            dataset[value] += 1
-            
+            dataset[value] += 1  
     return dataset
 
 def relativeFrequency(dataSet: dict) -> dict:
@@ -49,9 +47,7 @@ def mean(originalData: dict, sampleData: list) -> dict:
     for samples in sampleData:
         count+=1
         for sampleValues in samples:
-            if not sampleValues in sums:
-                sums[sampleValues] = samples[sampleValues]
-            else:
+            if sampleValues in sums:
                 sums[sampleValues] += samples[sampleValues]
      
     results = {}
@@ -87,10 +83,13 @@ def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
     
     return z
 
+def _cdf(z:float):
+    return 0.5 * (1 + math.erf(z/math.sqrt(2)))
+
 def pValue(zValues: dict) -> dict:
     p = {}
     for values in zValues:
-        p[values] =  scipy.stats.norm.sf(abs(zValues[values]))*2
+        p[values] = 2*(1 - (_cdf(math.fabs(zValues[values]))))
     return p     
 
 def _test():
