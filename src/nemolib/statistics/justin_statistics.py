@@ -12,6 +12,15 @@ def generateTestData(size : int):
             
     return dataset
 
+def relativeFrequency(dataSet: dict) -> dict:
+    n = 0
+    for values in dataSet:
+        n+= dataSet[values]
+    frequencies = {}
+    for values in dataSet:
+        frequencies[values] = dataSet[values]/n
+    return frequencies
+       
 def mean(originalData: dict, sampleData: list) -> dict:
     count = 0
     sums = {}
@@ -43,7 +52,8 @@ def _test():
         comparisonData.append(generateTestData(10))
 
     
-    mean(originalData, comparisonData)
+    means = mean(originalData, comparisonData)
+    print(relativeFrequency(originalData))
     
 if __name__ == "__main__":
     _test()
