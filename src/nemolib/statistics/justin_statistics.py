@@ -1,7 +1,10 @@
 import random
 import math
 
+'''Class that handlew required statistical calculation for sets of data stored in dicts'''
+
 def generateTestData(size: int):
+    '''Generates tests data using integers'''
     dataset = {}
     for x in range(size):
         value = random.randint(1,size)
@@ -12,6 +15,7 @@ def generateTestData(size: int):
     return dataset
 
 def relativeFrequency(dataSet: dict) -> dict:
+    ''' Calculate the relative frequencies for each subgraph in the original graph'''
     n = 0
     for values in dataSet:
         n+= dataSet[values]
@@ -21,6 +25,7 @@ def relativeFrequency(dataSet: dict) -> dict:
     return frequencies
 
 def randomMeanFrequency(dataSet: dict,sampleData: list) -> dict:
+    ''' Calculate the relative frequencies for subgraphs using all of the subgraphs'''
     freqsToCalc = {}
     sum = 0
     for values in dataSet:
@@ -35,6 +40,7 @@ def randomMeanFrequency(dataSet: dict,sampleData: list) -> dict:
     return freqsToCalc
        
 def mean(originalData: dict, sampleData: list) -> dict:
+    ''' Calculate the mean frequency for each subgraph '''
     count = 0
     sums = {}
     for values in originalData:
@@ -57,7 +63,7 @@ def mean(originalData: dict, sampleData: list) -> dict:
     return results;
 
 def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dict:
-    
+    ''' Calculate the standard deviation for each subgraph in the original graph'''
     std = {}
     diffFromMeanSq = {}
     n = 1
@@ -77,6 +83,7 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
     return std
 
 def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
+    ''' calculate the Z score for each subgraph in the original graph'''
     z = {}
     for values in originalData:
         z[values] = (originalData[values] - means[values])/standardDeviations[values]
@@ -84,11 +91,14 @@ def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
     return z
 
 def _cdf(z:float):
+    ''' cumaltive density function used for calculating p values '''
     return 0.5 * (1 + math.erf(z/math.sqrt(2)))
 
 def pValue(zValues: dict) -> dict:
+    ''' Calculate the P value, using a 2-tail test, for each subgraph in the original graph using Z values'''
     p = {}
     for values in zValues:
+        #subtracting 1 from cdf value and multiplying result by 2 to get 2-tailed p value
         p[values] = 2*(1 - (_cdf(math.fabs(zValues[values]))))
     return p     
 
