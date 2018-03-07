@@ -20,6 +20,20 @@ def relativeFrequency(dataSet: dict) -> dict:
     for values in dataSet:
         frequencies[values] = dataSet[values]/n
     return frequencies
+
+def randomMeanFrequency(dataSet: dict,sampleData: list) -> dict:
+    freqsToCalc = {}
+    sum = 0
+    for values in dataSet:
+        freqsToCalc[values] = 0
+    for samples in sampleData:
+        for sampleValues in samples:
+            sum+=samples[sampleValues]
+            if sampleValues in freqsToCalc:
+                freqsToCalc[sampleValues] += samples[sampleValues]
+    for values in freqsToCalc:
+        freqsToCalc[values] = freqsToCalc[values]/sum
+    return freqsToCalc
        
 def mean(originalData: dict, sampleData: list) -> dict:
     count = 0
@@ -54,6 +68,7 @@ def _test():
     
     means = mean(originalData, comparisonData)
     print(relativeFrequency(originalData))
+    print(randomMeanFrequency(originalData, comparisonData))
     
 if __name__ == "__main__":
     _test()
