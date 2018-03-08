@@ -56,6 +56,15 @@ def getG6LabelCount(graphs: list) -> dict:
 
     return result
 
+def batchGetCanonicalLabel(labels: list) -> list:
+    process = './labelg' + '\n'
+    cmd = [process]
+    for inputs in labels:
+        cmd.append((inputs + '\n').encode('utf-8'))
+        
+    output = subprocess.check_output(cmd)
+    print(output)
+
 def getCanonicalLabel(label: str) -> str:
     cmd = ['./labelg']
     input = (label + '\n').encode('utf-8')
