@@ -6,26 +6,34 @@
 # vertex. Vertices are created automatically based on the edge information.
 # Self edges and unconnected vertices are not allowed.
 
+# GraphParser may be called from command line with one optional arg - filename
+
 from undirected_graph import UndirectedGraph
 from random import shuffle
 import sys
 
-# """
-# port argparse
-# parser = 
-# argparse.ArgumentParser(description='Create a graph object from a text file')
-# parser.add_argument('--directed', 'd', help='for a directed graph')
-# parser.add_argument('--undirected', 'u', help='for an undirected graph')
-# parser.add_argument('')
-# """
-
-def parseUndirected(infile:str) -> UndirectedGraph:
+# parseGraph accepts a string as a parameter
+# infile is the filepath to a text file containing
+#   two nodes per line to represent each edge of the graph
+# Function will parse the file, building a set of unique vertices
+#   and an associative array containing each primary vertex as a key
+#   and each vertex they connect with as a list of ints for the value
+# Unsure of how much validation/error checking is necessary here
+# 
+def parseGraph(infile:str) -> UndirectedGraph:
     outGraph = UndirectedGraph()
     edgeHolder = {}
     vertices = set()
     
+    # in case of empty string parameter
+    if not infile:
+        print('Error: no file given')
+        outGraph.addVertexByName(0)
+        return outGraph
+
     with open(infile, 'r') as f:
         for line in f:
+
             thisEdge = line.split()
             print(thisEdge, '.')
             if thisEdge:
@@ -39,8 +47,7 @@ def parseUndirected(infile:str) -> UndirectedGraph:
                 edgeHolder[intA] = [intB]
 
     print(edgeHolder)
-    # for v in edgeHolder.keys():
-    #     outGraph.addVertex()
+
     for vertex in vertices:
         outGraph.addVertexByName(vertex)
 
@@ -51,14 +58,14 @@ def parseUndirected(infile:str) -> UndirectedGraph:
     return outGraph
 
 if __name__ == '__main__':
-    ''' do some testing stuff like -
-    call main function using filename 
-    provided in command line call'''
+    # do some testing stuff like
+    # call main function using filename 
+    # provided in command line call
     inf = ''
     if len(sys.argv) > 1:
         inf = sys.argv[1]
     else:
         inf = 'test4parse.txt'
     testGraph = UndirectedGraph()
-    testGraph = parseUndirected(inf)
+    testGraph = parseGraph(inf)
     print(testGraph)
