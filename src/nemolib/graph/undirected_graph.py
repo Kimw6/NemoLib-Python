@@ -16,7 +16,7 @@ class UndirectedGraph:
         self._numNodes += 1
         return self._numNodes - 1
 
-    def addVertexByName(self, nodeName: str):
+    def addVertexByName(self, nodeName):
         if (nodeName in self._nodesByName):
             return -1
         else:
