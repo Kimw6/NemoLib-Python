@@ -82,7 +82,7 @@ def batchGetCanonicalLabel(labels: list, knownLabels: dict) -> dict:
 
 def getCanonicalLabel(label: str) -> str:
     cmd = ['./labelg']
-    input = (label).encode('utf-8')
+    input = (label + '\n').encode('utf-8')
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, input=input)
     return result.stdout.decode('utf-8').strip('\n')
 
