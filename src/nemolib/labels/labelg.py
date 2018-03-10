@@ -1,6 +1,6 @@
 from .. graph.subgraph import Subgraph
-
 import subprocess
+
 
 def getG6Label(graph: Subgraph) -> str:
     adjacencyMatrix = { }
@@ -56,6 +56,30 @@ def getG6LabelCount(graphs: list) -> dict:
 
     return result
 
+def batchGetCanonicalLabel(labels: list, knownLabels: dict) -> dict:
+    f = open("input.txt","w+")
+    input = []
+
+    # add labels without known canonical labels to input.txt
+    for inputs in labels:
+        if (inputs not in knownLabels):
+            f.write(inputs+ '\n')
+            input.append(inputs)
+    f.close()
+    # run labelg for the unknown labels
+    cmd = ['./labelg', 'input.txt', 'output.txt']
+    subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) 
+    
+    # add newly found labels: canonical label key values pairs to knownLabels
+    f = open("output.txt", "r")
+    index = 0
+    for lines in f:
+        knownLabels[input[index]] = lines.strip()
+        index += 1
+    f.close()
+
+    return knownLabels
+
 def getCanonicalLabel(label: str) -> str:
     cmd = ['./labelg']
     input = (label + '\n').encode('utf-8')
@@ -63,7 +87,10 @@ def getCanonicalLabel(label: str) -> str:
     return result.stdout.decode('utf-8').strip('\n')
 
 def _test():
-    return
+    labels = batchGetCanonicalLabel(['DqC','DpG','DpC','DiG','DiC','DhC','DxG','DxC'], {})
+    for l in labels:
+        print(l,": ", labels[l])
+
 
 if __name__ == "__main__":
     '''Provide testing here.'''
