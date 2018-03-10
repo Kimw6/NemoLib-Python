@@ -11,7 +11,7 @@ def generateTestData(size: int):
         if not value in dataset:
             dataset[value] = 1
         else:
-            dataset[value] += 1  
+            dataset[value] += 1
     return dataset
 
 def relativeFrequency(dataSet: dict) -> dict:
@@ -38,7 +38,7 @@ def randomMeanFrequency(dataSet: dict,sampleData: list) -> dict:
     for values in freqsToCalc:
         freqsToCalc[values] = freqsToCalc[values]/sum
     return freqsToCalc
-       
+
 def mean(originalData: dict, sampleData: list) -> dict:
     ''' Calculate the mean frequency for each subgraph '''
     count = 0
@@ -55,12 +55,12 @@ def mean(originalData: dict, sampleData: list) -> dict:
         for sampleValues in samples:
             if sampleValues in sums:
                 sums[sampleValues] += samples[sampleValues]
-     
+
     results = {}
     for values in sums:
-        results[values] = sums[values]/count  
-    
-    return results;
+        results[values] = sums[values]/count
+
+    return results
 
 def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dict:
     ''' Calculate the standard deviation for each subgraph in the original graph'''
@@ -78,8 +78,8 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
         if (n <= 1):
             print("invalid sample size")
             return {}
-        std[values] = math.sqrt(diffFromMeanSq[values]/(n-1))         
-    
+        std[values] = math.sqrt(diffFromMeanSq[values]/(n-1))
+
     return std
 
 def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
@@ -87,7 +87,7 @@ def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
     z = {}
     for values in originalData:
         z[values] = (originalData[values] - means[values])/standardDeviations[values]
-    
+
     return z
 
 def _cdf(z:float):
@@ -100,7 +100,7 @@ def pValue(zValues: dict) -> dict:
     for values in zValues:
         #subtracting 1 from cdf value and multiplying result by 2 to get 2-tailed p value
         p[values] = 2*(1 - (_cdf(math.fabs(zValues[values]))))
-    return p     
+    return p
 
 def _test():
     originalData = generateTestData(10)
@@ -109,7 +109,7 @@ def _test():
         comparisonData.append(generateTestData(10))
 
 
-    
+
     means = mean(originalData, comparisonData)
     print(means)
     std = standardDeviation(originalData, comparisonData, means)
@@ -120,6 +120,6 @@ def _test():
     print(z)
     p = pValue(z)
     print(p)
-    
+
 if __name__ == "__main__":
     _test()
