@@ -35,7 +35,7 @@ def parseGraph(infile:str) -> UndirectedGraph:
         for line in f:
 
             thisEdge = line.split()
-            print(thisEdge, '.')
+            # print(thisEdge, '.')
             if thisEdge:
                 intA = int(thisEdge[0])
                 intB = int(thisEdge[1])
@@ -46,7 +46,7 @@ def parseGraph(infile:str) -> UndirectedGraph:
             else:
                 edgeHolder[intA] = [intB]
 
-    print(edgeHolder)
+    # print(edgeHolder)
 
     for vertex in vertices:
         outGraph.addVertexByName(vertex)
