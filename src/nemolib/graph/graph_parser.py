@@ -23,6 +23,7 @@ def parseGraph(infile:str) -> UndirectedGraph:
     outGraph = UndirectedGraph()
     edgeHolder = {}
     vertices = set()
+    lines = []
 
     # in case of empty string parameter
     if not infile:
@@ -32,15 +33,20 @@ def parseGraph(infile:str) -> UndirectedGraph:
 
     with open(infile, 'r') as f:
         for line in f:
-
             thisEdge = line.split()
-            #print(thisEdge, '.')
-            if thisEdge:
-                intA = int(thisEdge[0])
-                intB = int(thisEdge[1])
-                vertices.add(intA)
-                vertices.add(intB)
-            if intA in edgeHolder:
+            lines.append(thisEdge)
+
+    # probably a wasted step
+    shuffle(lines)
+
+    for l in lines:
+        if l:
+            intA = int(l[0])
+            intB = int(l[1])
+            vertices.add(intA)
+            vertices.add(intB)
+            # print(thisEdge, '.')
+            if intA in edgeHolder.keys():
                 edgeHolder[intA].append(intB)
             else:
                 edgeHolder[intA] = [intB]
