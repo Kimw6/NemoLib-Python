@@ -8,8 +8,12 @@
 
 # GraphParser may be called from command line with one optional arg - filename
 
-from .undirected_graph import UndirectedGraph
+try:
+    from .undirected_graph import UndirectedGraph
+except Exception: #ImportError
+    from undirected_graph import UndirectedGraph 
 import sys
+from random import shuffle
 
 # parseGraph accepts a string as a parameter
 # infile is the filepath to a text file containing
@@ -71,6 +75,7 @@ if __name__ == '__main__':
         inf = sys.argv[1]
     else:
         inf = 'test4parse.txt'
+
     testGraph = UndirectedGraph()
-    testGraph = parseGraph(inf)
+    testGraph = parseGraph(fpath)
     print(testGraph)
