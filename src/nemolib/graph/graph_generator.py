@@ -42,7 +42,7 @@ def generateGraphSet(sourceGraph: UndirectedGraph, numGraphs: int, useMultiproce
     else:
         result = []
         for _ in range(0, numGraphs):
-            result.append(generateGraph)
+            result.append(generateGraph(sourceGraph))
 
     return result
 
