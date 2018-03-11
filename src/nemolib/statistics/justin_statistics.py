@@ -2,7 +2,7 @@ import random
 import math
 from copy import deepcopy
 
-'''Class that handlew required statistical calculation for sets of data stored in dicts'''
+'''Class that handle required statistical calculation for sets of data stored in dicts'''
 
 def generateTestData(size: int):
     '''Generates tests data using integers'''
@@ -16,7 +16,7 @@ def generateTestData(size: int):
     return dataset
 
 def relativeFrequency(dataSet: dict) -> dict:
-    ''' Calculate the relative frequencies for each subgraph in a graph'''
+    ''' Calculate the relative frequencies for each subgraph in the original graph'''
     n = 0
     for values in dataSet:
         n+= dataSet[values]
@@ -28,6 +28,11 @@ def relativeFrequency(dataSet: dict) -> dict:
 def randomMeanFrequency(dataSet: dict, sampleData: list) -> dict:
     ''' Calculate the relative frequencies for subgraphs using all of the subgraphs'''
     relFreqs = deepcopy(sampleData)
+
+    for index in  range(0, len(relFreqs)):
+        print(relFreqs[index])
+        relFreqs[index] = relativeFrequency(relFreqs[index])
+        print(relFreqs[index])
     meanFreqs = {}
     for keys in dataSet:
         meanFreqs[keys] = 0;
@@ -65,14 +70,11 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
     ''' Calculate the standard deviation for each subgraph in the original graph'''
     std = {}
     diffFromMeanSq = {}
-    relativeValues = []
-    for i in range(0, len(sampleData)):
-        relativeValues.append(normalizeData(sampleData[i]))
 
     n = 0
     for values in originalData:
         diffFromMeanSq[values] = 0
-    for samples in relativeValues:
+    for samples in sampleData:
         n += 1
         for sampleValues in samples:
             if sampleValues in originalData:
@@ -84,9 +86,11 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
 def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
     ''' calculate the Z score for each subgraph in the original graph'''
     z = {}
-    x = relativeFrequency(originalData)
-    for values in x:
-        z[values] = (x[values] - means[values])/(standardDeviations[values]+.000000001)
+    for values in originalData:
+        try:
+            z[values] = (originalData[values] - means[values])/(standardDeviations[values])
+        except:
+            z[values] = (originalData[values] - means[values])/.000001
 
     return z
 

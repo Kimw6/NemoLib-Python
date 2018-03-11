@@ -16,14 +16,16 @@ if __name__ == "__main__":
 
     data_labels, random_labels = labelg.graphsToG6Labels(subgraphs, random_subgraphs)
 
+    random_mean_frequency = stats.randomMeanFrequency(data_labels, random_labels)
+    means = random_mean_frequency
+
     # Making all data relative frequencies
     data_labels = stats.relativeFrequency(data_labels)
     for index in range(0, len(random_labels)):
         random_labels[index] = stats.relativeFrequency(random_labels[index])
 
     relative_frequency = data_labels
-    random_mean_frequency = stats.randomMeanFrequency(data_labels, random_labels)
-    means = random_mean_frequency
+
     std = stats.standardDeviation(data_labels, random_labels, means)
     z = stats.zScore(data_labels, means, std)
     p = stats.pValue(z)
