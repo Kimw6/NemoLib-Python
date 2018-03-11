@@ -8,7 +8,7 @@ if __name__ == "__main__":
     '''Provide testing here.'''
     graph = graph_parser.parseGraph('exampleGraph.txt')
     subgraphs = esu.getAllSubgraphs(graph, 4, [1, 1, 1, 1])
-    random_graphs = graph_generator.generateGraphSet(graph, 1)
+    random_graphs = graph_generator.generateGraphSet(graph, 10)
     random_subgraphs = []
     for r_graph in random_graphs:
         print('Enumerating...')
@@ -16,19 +16,17 @@ if __name__ == "__main__":
 
     data_labels, random_labels = labelg.graphsToG6Labels(subgraphs, random_subgraphs)
 
+    # Making all data relative frequencies
+    data_labels = stats.relativeFrequency(data_labels)
+    for index in range(0, len(random_labels)):
+        random_labels[index] = stats.relativeFrequency(random_labels[index])
 
-    means = stats.mean(data_labels, random_labels)
-    #print(means)
-    std = stats.standardDeviation(data_labels, random_labels, means)
-    relative_frequency = stats.relativeFrequency(data_labels)
+    relative_frequency = data_labels
     random_mean_frequency = stats.randomMeanFrequency(data_labels, random_labels)
-    #print(relativeFrequency(originalData))
-    #print(randomMeanFrequency(originalData, comparisonData))
-    #print(std)
+    means = random_mean_frequency
+    std = stats.standardDeviation(data_labels, random_labels, means)
     z = stats.zScore(data_labels, means, std)
-    #print('Z-Score:', z)
     p = stats.pValue(z)
-    #print('P-Value:', p)
 
     all_labels = set()
     for label in data_labels:
@@ -38,7 +36,7 @@ if __name__ == "__main__":
         for label in l:
             all_labels.add(label)
 
-    print(data_labels)
+    # print(data_labels)
 
     print('Label \t RelFrequency \t RandMeanFreq \t Z-Score \t P-Value')
     for label in all_labels:

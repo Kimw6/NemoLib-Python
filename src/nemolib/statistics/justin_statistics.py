@@ -1,5 +1,6 @@
 import random
 import math
+from copy import deepcopy
 
 '''Class that handlew required statistical calculation for sets of data stored in dicts'''
 
@@ -15,7 +16,7 @@ def generateTestData(size: int):
     return dataset
 
 def relativeFrequency(dataSet: dict) -> dict:
-    ''' Calculate the relative frequencies for each subgraph in the original graph'''
+    ''' Calculate the relative frequencies for each subgraph in a graph'''
     n = 0
     for values in dataSet:
         n+= dataSet[values]
@@ -24,31 +25,29 @@ def relativeFrequency(dataSet: dict) -> dict:
         frequencies[values] = dataSet[values]/n
     return frequencies
 
-def randomMeanFrequency(dataSet: dict,sampleData: list) -> dict:
+def randomMeanFrequency(dataSet: dict, sampleData: list) -> dict:
     ''' Calculate the relative frequencies for subgraphs using all of the subgraphs'''
-    freqsToCalc = {}
-    sum = 0
-    for values in dataSet:
-        freqsToCalc[values] = 0
-    for samples in sampleData:
-        for sampleValues in samples:
-            sum+=samples[sampleValues]
-            if sampleValues in freqsToCalc:
-                freqsToCalc[sampleValues] += samples[sampleValues]
-    for values in freqsToCalc:
-        freqsToCalc[values] = freqsToCalc[values]/sum
-    return freqsToCalc
+    relFreqs = deepcopy(sampleData)
+    meanFreqs = {}
+    for keys in dataSet:
+        meanFreqs[keys] = 0;
+
+    for samples in relFreqs:
+        for keys in samples:
+            if keys in dataSet:
+                meanFreqs[keys] += samples[keys]
+
+    for keys in meanFreqs:
+        meanFreqs[keys] = meanFreqs[keys]/len(sampleData)
+
+    return meanFreqs
 
 def mean(originalData: dict, sampleData: list) -> dict:
     ''' Calculate the mean frequency for each subgraph '''
     count = 0
     sums = {}
     for values in originalData:
-        if not values in sums:
-            sums[values] = originalData[values]
-        else:
-            sums[values] += originalData[values]
-    count+=1
+            sums[values] = 0
 
     for samples in sampleData:
         count+=1
@@ -66,27 +65,28 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
     ''' Calculate the standard deviation for each subgraph in the original graph'''
     std = {}
     diffFromMeanSq = {}
-    n = 1
+    relativeValues = []
+    for i in range(0, len(sampleData)):
+        relativeValues.append(normalizeData(sampleData[i]))
+
+    n = 0
     for values in originalData:
-        diffFromMeanSq[values] = math.pow(originalData[values] - means[values],2)
-    for samples in sampleData:
-        n +=1
+        diffFromMeanSq[values] = 0
+    for samples in relativeValues:
+        n += 1
         for sampleValues in samples:
             if sampleValues in originalData:
-                diffFromMeanSq[sampleValues] += math.pow(samples[sampleValues] - means[values],2)
+                diffFromMeanSq[sampleValues] += math.pow(samples[sampleValues] - means[sampleValues],2)
     for values in diffFromMeanSq:
-        if (n <= 1):
-            print("invalid sample size")
-            return {}
         std[values] = math.sqrt(diffFromMeanSq[values]/(n-1))
-
     return std
 
 def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
     ''' calculate the Z score for each subgraph in the original graph'''
     z = {}
-    for values in originalData:
-        z[values] = (originalData[values] - means[values])/standardDeviations[values]
+    x = relativeFrequency(originalData)
+    for values in x:
+        z[values] = (x[values] - means[values])/(standardDeviations[values]+.000000001)
 
     return z
 
