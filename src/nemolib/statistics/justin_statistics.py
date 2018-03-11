@@ -25,25 +25,33 @@ def relativeFrequency(dataSet: dict) -> dict:
         frequencies[values] = dataSet[values]/n
     return frequencies
 
-def randomMeanFrequency(dataSet: dict, sampleData: list) -> dict:
-    ''' Calculate the relative frequencies for subgraphs using all of the subgraphs'''
-    relFreqs = deepcopy(sampleData)
+def makeDatasetRelative(dataSet: list) -> list:
+    index = 0
+    for sets in dataSet:
+        sum = 0
+        for keys in sets:
+            sum += sets[keys]
+        for keys in sets:
+            dataSet[index][keys] = dataSet[index][keys]/sum
+        index += 1
+    return dataSet
 
-    for index in  range(0, len(relFreqs)):
-        print(relFreqs[index])
-        relFreqs[index] = relativeFrequency(relFreqs[index])
-        print(relFreqs[index])
+# sampleData should be relative frequencies
+def randomMeanFrequency(dataSet: dict, sampleData: list) -> dict:
+
+    frequencySums = {}
     meanFreqs = {}
     for keys in dataSet:
+        frequencySums[keys] = 0;
         meanFreqs[keys] = 0;
 
-    for samples in relFreqs:
+    for samples in sampleData:
         for keys in samples:
             if keys in dataSet:
-                meanFreqs[keys] += samples[keys]
+                frequencySums[keys] += samples[keys]
 
     for keys in meanFreqs:
-        meanFreqs[keys] = meanFreqs[keys]/len(sampleData)
+        meanFreqs[keys] = frequencySums[keys]/len(sampleData)
 
     return meanFreqs
 
@@ -71,16 +79,14 @@ def standardDeviation(originalData: dict,  sampleData: list, means: dict) -> dic
     std = {}
     diffFromMeanSq = {}
 
-    n = 0
     for values in originalData:
         diffFromMeanSq[values] = 0
     for samples in sampleData:
-        n += 1
         for sampleValues in samples:
             if sampleValues in originalData:
                 diffFromMeanSq[sampleValues] += math.pow(samples[sampleValues] - means[sampleValues],2)
     for values in diffFromMeanSq:
-        std[values] = math.sqrt(diffFromMeanSq[values]/(n-1))
+        std[values] = math.sqrt(diffFromMeanSq[values]/(len(sampleData)-1))
     return std
 
 def zScore(originalData: dict, means: dict, standardDeviations: dict) -> dict:
@@ -107,20 +113,32 @@ def pValue(zValues: dict) -> dict:
     return p
 
 def _test():
-    originalData = generateTestData(10)
+    originalData = {'C~': 64, 'CR': 42694, 'C^': 372, 'CF': 78113, 'Cr': 1009, 'CN': 5232}
+    
+    relOriginalData = relativeFrequency(originalData)
+    print(relOriginalData)
+    print()
+    
     comparisonData = []
-    for x in range(100):
-        comparisonData.append(generateTestData(10))
+    comparisonData.append({'CR': 1988, 'CF': 2309, 'CN': 61, 'Cr': 3})
+    comparisonData.append({'CR': 2556, 'C^': 1, 'CN': 64, 'CF': 2487, 'Cr': 1})
+    comparisonData.append({'CR': 2109, 'CF': 1670, 'CN': 10, 'Cr': 3})
+    comparisonData.append({'CR': 2009, 'C^': 1, 'CN': 26, 'CF': 2488, 'Cr': 7})
+    comparisonData.append({'CN': 178, 'Cr': 3, 'CF': 3484, 'C^': 5, 'CR': 2987})
+    
 
+    makeDatasetRelative(comparisonData)
 
-
-    means = mean(originalData, comparisonData)
+    for x in comparisonData:
+        print (x)
+        
+    print()
+    means = randomMeanFrequency(relOriginalData, comparisonData)
     print(means)
-    std = standardDeviation(originalData, comparisonData, means)
-    #print(relativeFrequency(originalData))
-    #print(randomMeanFrequency(originalData, comparisonData))
+    
+    std = standardDeviation(relOriginalData, comparisonData, means)
     print(std)
-    z =zScore(originalData,means,std)
+    z =zScore(relOriginalData,means,std)
     print(z)
     p = pValue(z)
     print(p)
