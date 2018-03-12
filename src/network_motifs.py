@@ -5,16 +5,78 @@ import nemolib.labels.labelg as labelg
 import nemolib.statistics.justin_statistics as stats
 from timeit import default_timer as timer
 
+import sys
+import multiprocessing
+from multiprocessing import Pool
+import os
+
+sourceGraph = None
+subgraph_size = 3
+sample_enumeration_probabilities = [.5, .5, .5]
+
+def f(num_random_graphs) -> list:
+    random_subgraphs = []
+    random_graphs = graph_generator.generateGraphSet(graph, num_random_graphs)
+    for r_graph in random_graphs:
+        print(os.getpid(), 'Enumerating...')
+        random_subgraphs.append(esu.getAllSubgraphs(r_graph, subgraph_size, sample_enumeration_probabilities))
+
+    return random_subgraphs
+
 if __name__ == "__main__":
     '''Provide testing here.'''
+    if len(sys.argv) != 4:
+        print("Usage: python network_motifs.py <graph> <subgraph_size> <num_random_graphs>")
+
+    try:
+        filepath = sys.argv[1]
+        subgraph_size = int(sys.argv[2])
+        num_random_graphs = int(sys.argv[3])
+    except:
+        print("An error occurred.")
+        sys.exit()
+
+    full_enumeration_probabilities = []
+    for _ in range(0, subgraph_size):
+        full_enumeration_probabilities.append(1)
+
+    sample_enumeration_probabilities = []
+    for _ in range(0, subgraph_size):
+        sample_enumeration_probabilities.append(0.5)
+
     start = timer()
-    graph = graph_parser.parseGraph('exampleGraph.txt')
-    subgraphs = esu.getAllSubgraphs(graph, 4, [1, 1, 1, 1])
-    random_graphs = graph_generator.generateGraphSet(graph, 100)
+
+    graph = graph_parser.parseGraph(filepath)
+    subgraphs = esu.getAllSubgraphs(graph, subgraph_size, full_enumeration_probabilities)
+
+    use_multiprocessing = True
+
     random_subgraphs = []
-    for r_graph in random_graphs:
-        print('Enumerating...')
-        random_subgraphs.append(esu.getAllSubgraphs(r_graph, 4, [.5, .5, .5, .5]))
+
+    if use_multiprocessing:
+        num_cores = multiprocessing.cpu_count()
+
+        task_distribution = []
+        if num_random_graphs % num_cores == 0:
+            for _ in range(0, num_cores):
+                task_distribution.append(num_random_graphs // num_cores)
+        else:
+            for _ in range(0, num_cores - 1):
+                task_distribution.append(num_random_graphs // num_cores)
+            task_distribution.append(num_random_graphs % num_cores + (num_random_graphs // num_cores))
+
+        p = Pool(num_cores)
+        results = []
+        sourceGraph = graph
+        results = p.map(f, task_distribution)
+
+        for r in results:
+            random_subgraphs += r
+    else:
+        random_graphs = graph_generator.generateGraphSet(graph, num_random_graphs)
+        for r_graph in random_graphs:
+            print('Enumerating...')
+            random_subgraphs.append(esu.getAllSubgraphs(r_graph, subgraph_size, sample_enumeration_probabilities))
 
     data_labels, random_labels = labelg.graphsToG6Labels(subgraphs, random_subgraphs)
 
